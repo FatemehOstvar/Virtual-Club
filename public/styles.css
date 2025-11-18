@@ -1,0 +1,13 @@
+:root {
+    --theme1: aquamarine
+}
+
+#joining, #login{
+    text-align: center;
+    background-color: var(--theme1);
+}
+
+#message{
+    display: flex;
+    gap: 1rem;
+}
