@@ -9,15 +9,15 @@
     <title>Document</title>
 </head>
 <body>
-<div id="joining">
-<p>Join The club</p>
-<form action="/join">
-    <label>Enter your passkey
-        <input type="text" name="join">
-    </label>
+<%const role = req.user.rolename%>
+<%if(role !== 'spectator'){%>
+<form action="/<%role%>/newMessage" method="post">
+    <label for="content"></label>
+    <input type="text" id="content" name="content">
 
-    <button type="submit">Submit</button>
+    <label for=""></label>
+    <input type="text">
 </form>
-    </div>
+<%}%>
 </body>
 </html>
