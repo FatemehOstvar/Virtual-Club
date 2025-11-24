@@ -60,8 +60,7 @@ async function getAllMessages() {
   const result = await pool.query(
     `SELECT
     m.message_id, m.content,
-    m.creationDate, u.firstName,
-    u.lastName, u.roleName
+    m.creationDate
     FROM users AS u
     JOIN users_messages AS um ON u.id = um.user_id JOIN messages AS m
     ON um.message_id = m.message_id
@@ -83,6 +82,19 @@ async function upgradeRole(userId) {
   return result.rows[0];
 }
 
+async function checkUserExists(username) {
+    const result = await pool.query(
+        `SELECT * FROM users WHERE username = $1`,[username]
+    );
+    return result.rows[0];
+}
+
+async function findById(id) {
+    const result = await pool.query(
+        `SELECT * FROM users WHERE id = $1`[id],
+    )
+}
+
 module.exports = {
   addUser,
   addMessage,
@@ -90,4 +102,5 @@ module.exports = {
   getAllMessageContent,
   getAllMessages,
   upgradeRole,
+    checkUserExists
 };
