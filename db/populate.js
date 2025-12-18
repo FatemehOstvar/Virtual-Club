@@ -46,6 +46,7 @@ async function populate() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS messages (
         message_id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
         creationDate TIMESTAMP NOT NULL DEFAULT NOW(),
         content TEXT NOT NULL
       );

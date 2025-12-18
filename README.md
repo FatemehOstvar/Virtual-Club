@@ -1,2 +1,2 @@
-# memebers-only
+# memebrs-only
 

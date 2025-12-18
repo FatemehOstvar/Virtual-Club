@@ -2,10 +2,10 @@ const bcrypt = require('bcryptjs');
 const { pool } = require('./pool');
 
 
-async function addUser(username,firstName, lastName, plainPassword, roleName = 'spectator') {
+async function addUser({username, firstName, lastName, plainPassword, roleName = 'spectator'}) {
   const hash = await bcrypt.hash(plainPassword, 10);
   const result = await pool.query(
-    `INSERT INTO users (firstName, lastName, password, roleName)
+    `INSERT INTO users (username,firstname, lastname, password, rolename)
      VALUES ($1, $2, $3, $4, $5)
      RETURNING id, username, firstName, lastName, roleName`,
     [username,firstName, lastName, hash, roleName]
@@ -15,16 +15,39 @@ async function addUser(username,firstName, lastName, plainPassword, roleName = '
 }
 
 // 2. Add a message
-async function addMessage(content) {
-  const result = await pool.query(
-    `INSERT INTO messages (content)
-     VALUES ($1)
-     RETURNING message_id, creationDate, content`,
-    [content]
-  );
+async function addMessage({ title, content}, user_id ) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
 
-  return result.rows[0];
+   const user = await findById(user_id);
+    if (!user) throw new Error("User does not exist(dead error)");
+
+    const msgRes = await client.query(
+      `INSERT INTO messages (title, content)
+       VALUES ($1, $2)
+       RETURNING message_id`,
+      [title, content]
+    );
+
+    const message_id = msgRes.rows[0].message_id;
+
+    await client.query(
+      `INSERT INTO users_messages (user_id, message_id)
+       VALUES ($1, $2)`,
+      [user_id, message_id]
+    );
+
+    await client.query("COMMIT");
+    return { message_id };
+  } catch (err) {
+    await client.query("ROLLBACK");
+    throw err;
+  } finally {
+    client.release();
+  }
 }
+
 
 // 3. Delete a message
 async function deleteMessage(messageId) {
@@ -59,14 +82,13 @@ async function getAllMessageContent() {
 async function getAllMessages() {
   const result = await pool.query(
     `SELECT
-    m.message_id, m.content,
-    m.creationDate
+    m.message_id,m.title, m.content,
+    m.creationdate, u.firstname, u.lastname
     FROM users AS u
     JOIN users_messages AS um ON u.id = um.user_id JOIN messages AS m
     ON um.message_id = m.message_id
-    ORDER BY creationDate DESC;`
+    ORDER BY m.creationdate ASC;`
   );
-
   return result.rows;
 }
 // 6. Upgrade role (spectator → user)
@@ -91,8 +113,9 @@ async function checkUserExists(username) {
 
 async function findById(id) {
     const result = await pool.query(
-        `SELECT * FROM users WHERE id = $1`[id],
-    )
+        `SELECT * FROM users WHERE id = $1`,[id]
+    );
+    return result.rows[0];
 }
 
 module.exports = {
@@ -101,6 +124,6 @@ module.exports = {
   deleteMessage,
   getAllMessageContent,
   getAllMessages,
-  upgradeRole,
+  upgradeRole,findById,
     checkUserExists
 };
