@@ -5,20 +5,20 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <link rel="stylesheet" href="./styles.css">
+
     <title>Document</title>
 </head>
 <body>
 <%- include('partials/error') %>
-<%const role = req.user.rolename%>
-<%if(role !== 'spectator'){%>
-<form action="/<%role%>/newMessage" method="post">
-    <label for="content"></label>
-    <input type="text" id="content" name="content">
+<form action="/<%= roleName%>/newMessage" method="post">
+    <label for="title">Subject</label>
+    <input type="text" id="title" name="title">
 
-    <label for=""></label>
-    <input type="text">
+    <label for="content">message</label>
+    <textarea name="content" id="content" cols="30" rows="10"></textarea>
+
+    <button type="submit">send</button>
 </form>
-<%}%>
+<a href="/<%=roleName%>/messages">back</a>
 </body>
 </html>
