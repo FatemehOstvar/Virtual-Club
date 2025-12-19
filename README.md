@@ -1,4 +1,4 @@
-````markdown
+````
 # Virtual Club
 
 Virtual Club is a role-based messaging web app built with **Node.js**, **Express**, **EJS**, and **PostgreSQL**.  
@@ -20,7 +20,7 @@ https://virtual-club.onrender.com
 ```bash
 npm install
 npm start
-````
+
 
 Open:
 
@@ -36,4 +36,4 @@ Open:
 ```
 ```
 
-
+````
