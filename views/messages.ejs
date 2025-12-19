@@ -39,6 +39,7 @@
             <article class="card">
               <header class="card__header">
                 <div class="card__meta">
+                <%if (roleName !== 'spectator'){%>
                   <div class="card__author">
                     <span class="label">From</span>
                     <span class="value"><%= firstname %> <%= lastname %></span>
@@ -48,6 +49,7 @@
                     <span class="label">Created</span>
                     <time class="value" datetime="<%= creationdate %>"><%= creationdate %></time>
                   </div>
+                    <%}%>
                 </div>
 
                 <% if (roleName === 'admin') { %>
@@ -64,9 +66,7 @@
                 <% } %>
               </header>
 
-              <% if (title) { %>
                 <h2 class="card__title"><%= title %></h2>
-              <% } %>
 
               <p class="card__content"><%= content %></p>
             </article>
