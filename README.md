@@ -7,7 +7,7 @@
 [![Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?logo=render&logoColor=white)](https://virtual-club.onrender.com)
 
 A role-based messaging web app built with **Node.js**, **Express**, **EJS**, and **PostgreSQL**.  
-Users can **sign up**, **log in**, and **browse messages**. Depending on role permissions, users can **create messages**, and **admins** can **delete messages**. Spectators can also use **Join The Club** to upgrade access. the secret code is "got".
+Users can **sign up**, **log in**, and **browse messages**. Depending on role permissions, users can **create messages**, and **admins** can **delete messages**. Spectators can also use **Join The Club** to upgrade access. the secret code is needed.
 
 ---
 
