@@ -37,6 +37,11 @@ app.use((req,res,next)=>{
     res.locals.roleName = null;
     res.locals.role = null;
     res.locals.pageCss = null;
+
+    res.locals.username = "";
+    res.locals.nameI = "";
+    res.locals.lastname = "";
+    res.locals.password = "";
     next()
 })
 app.use('/admin', adminRouter)

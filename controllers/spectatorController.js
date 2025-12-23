@@ -6,12 +6,13 @@ require('../config/passport')(passport);
 const { body, validationResult, matchedData } = require("express-validator");
 
 async function logIn(req, res, next) {
+    const { username} = req.body;
     passport.authenticate('local', (err, user, info) => {
         if (err) {
             return next(err);
         }
         if (!user) { // TODO use express-validator. for more tailored errors
-            return res.render('login',{pageCss: "auth.css" ,err: info?.message|| 'Login failed'});
+            return res.render('login',{pageCss: "auth.css" ,username: username,err: info?.message|| 'Login failed'});
         }
         req.logIn(user, (err)=>{
             if (err) return next(err);
@@ -75,11 +76,17 @@ function root(req, res, next) {
 const register = [
     validateUser,
     async (req, res, next) =>{
+    const { username, name, lastname, password } = req.body;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.render('sign-up', {
-                pageCss: "auth.css" ,
-            err: errors.array().map(e => e.msg).join("\n-")
+            pageCss: "auth.css" ,
+            username: username,
+            password: password ,
+            nameI: name || "",
+            lastname: lastname || "",
+            err: errors.array().map(e => `- ${e.msg}`).join("\n")
+
         })
     }
     try {
@@ -87,6 +94,10 @@ const register = [
         if(alreadyExists){
             return res.render('sign-up', {
                 pageCss: "auth.css" ,
+            username: username,
+            password: password ,
+            nameI: name || "",
+            lastname: lastname || "",
                 err: ['Username already exists']
             });
         }

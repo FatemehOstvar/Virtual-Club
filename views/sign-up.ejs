@@ -14,16 +14,16 @@
 <div id="signup"><p>sign up</p>
     <form action="/sign-up" method="post">
         <label>username
-            <input type="text" name="username">
+            <input type="text" name="username" value="<%= username|| ''%>">
         </label>
         <label>first name
-            <input type="text" name="name">
+            <input type="text" name="name" value="<%= nameI|| ''%>">
         </label>
         <label>Last name
-            <input type="text" name="lastname">
+            <input type="text" name="lastname" value="<%= lastname|| ''%>">
         </label>
         <label>Password
-            <input type="text" name="password">
+            <input type="text" name="password" >
         </label>
     <button type="submit">Submit</button>
     </form>
